@@ -38,11 +38,18 @@
       "atom-material-syntax"
     ]
   editor:
-    fontSize: 12
+    fontSize: 11
     invisibles: {}
     showIndentGuide: true
   "exception-reporting":
     userId: "d60173a7-96a2-256d-0c47-bace9be4875c"
+  jshint:
+    supportLintingJsx: true
+  jslint:
+    validateOnChange: true
+  "linter-eslint":
+    fixOnSave: true
+  "linter-ui-default": {}
   "split-diff":
     ignoreWhitespace: true
   "tree-view": {}
