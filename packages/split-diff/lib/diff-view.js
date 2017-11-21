@@ -104,7 +104,11 @@ module.exports = class DiffView {
       this._isSelectionActive = true;
     }
 
-    this._selectChunk(this._selectedChunkIndex, true);
+    var success = this._selectChunk(this._selectedChunkIndex, true);
+    if(!success) {
+        return -1;
+    }
+
     return this._selectedChunkIndex;
   }
 
@@ -121,7 +125,11 @@ module.exports = class DiffView {
       this._isSelectionActive = true;
     }
 
-    this._selectChunk(this._selectedChunkIndex, true);
+    var success = this._selectChunk(this._selectedChunkIndex, true);
+    if(!success) {
+        return -1;
+    }
+
     return this._selectedChunkIndex;
   }
 
@@ -210,6 +218,14 @@ module.exports = class DiffView {
     }
   }
 
+  restoreEditorSoftWrap(editorIndex) {
+    if(editorIndex === 1) {
+      this._editorDiffExtender1.getEditor().setSoftWrapped(true);
+    } else if(editorIndex === 2) {
+      this._editorDiffExtender2.getEditor().setSoftWrapped(true);
+    }
+  }
+
   /**
    * Destroys the editor diff extenders.
    */
@@ -274,7 +290,11 @@ module.exports = class DiffView {
       // highlight selection in both editors
       this._editorDiffExtender1.selectLines(diffChunk.oldLineStart, diffChunk.oldLineEnd);
       this._editorDiffExtender2.selectLines(diffChunk.newLineStart, diffChunk.newLineEnd);
+
+      return true;
     }
+
+    return false;
   }
 
   _getChunkIndexByLineNumber(editorIndex, lineNumber) {

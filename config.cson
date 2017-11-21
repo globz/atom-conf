@@ -28,7 +28,6 @@
     General:
       showButtons: true
   core:
-    autoHideMenuBar: true
     disabledPackages: [
       "spell-check"
     ]
@@ -38,7 +37,7 @@
       "atom-material-syntax"
     ]
   editor:
-    fontSize: 11
+    fontSize: 12
     invisibles: {}
     showIndentGuide: true
   "exception-reporting":
@@ -47,9 +46,15 @@
     supportLintingJsx: true
   jslint:
     validateOnChange: true
+  "language-babel":
+    allowLocalOverride: true
+    babelTranspilePath: "lib\\js\\transpiled"
+    createTranspiledCode: true
   "linter-eslint":
     fixOnSave: true
-  "linter-ui-default": {}
+  "linter-ui-default":
+    panelHeight: 130
+    showPanel: true
   "split-diff":
     ignoreWhitespace: true
   "tree-view": {}

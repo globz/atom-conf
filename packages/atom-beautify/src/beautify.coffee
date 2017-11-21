@@ -542,9 +542,10 @@ handleSaveEvent = ->
             # It will add a newline and keep the file from converging on a beautified form
             # and saving without emitting onDidSave event, because there were no changes.
             pendingPaths[filePath] = true
-            editor.save()
-            delete pendingPaths[filePath]
-            logger.verbose('Saved TextEditor.')
+            Promise.resolve(editor.save()).then(() ->
+              delete pendingPaths[filePath]
+              logger.verbose('Saved TextEditor.')
+            )
         )
         .catch((error) ->
           return showError(error)
@@ -554,6 +555,9 @@ handleSaveEvent = ->
       beautifyOnSaveHandler({path: filePath})
     )
     plugin.subscriptions.add disposable
+
+openSettings = ->
+  atom.workspace.open('atom://config/packages/atom-beautify')
 
 getUnsupportedOptions = ->
   settings = atom.config.get('atom-beautify')
@@ -621,6 +625,7 @@ plugin.activate = ->
   @subscriptions.add handleSaveEvent()
   @subscriptions.add atom.commands.add "atom-workspace", "atom-beautify:beautify-editor", beautify
   @subscriptions.add atom.commands.add "atom-workspace", "atom-beautify:help-debug-editor", debug
+  @subscriptions.add atom.commands.add "atom-workspace", "atom-beautify:open-settings", openSettings
   @subscriptions.add atom.commands.add ".tree-view .file .name", "atom-beautify:beautify-file", beautifyFile
   @subscriptions.add atom.commands.add ".tree-view .directory .name", "atom-beautify:beautify-directory", beautifyDirectory
   @subscriptions.add atom.commands.add "atom-workspace", "atom-beautify:migrate-settings", plugin.migrateSettings

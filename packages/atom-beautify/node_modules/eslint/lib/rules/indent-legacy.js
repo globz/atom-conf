@@ -729,11 +729,13 @@ module.exports = {
                 if (!parentVarNode || parentVarNode.loc.start.line !== node.loc.start.line) {
                     if (parent.type !== "VariableDeclarator" || parentVarNode === parentVarNode.parent.declarations[0]) {
                         if (parent.type === "VariableDeclarator" && parentVarNode.loc.start.line === parent.loc.start.line) {
-                            nodeIndent = nodeIndent + (indentSize * options.VariableDeclarator[parentVarNode.parent.kind]);
+                            nodeIndent += (indentSize * options.VariableDeclarator[parentVarNode.parent.kind]);
                         } else if (parent.type === "ObjectExpression" || parent.type === "ArrayExpression") {
                             const parentElements = node.parent.type === "ObjectExpression" ? node.parent.properties : node.parent.elements;
 
-                            if (parentElements[0] && parentElements[0].loc.start.line === parent.loc.start.line && parentElements[0].loc.end.line !== parent.loc.start.line) {
+                            if (parentElements[0] &&
+                                    parentElements[0].loc.start.line === parent.loc.start.line &&
+                                    parentElements[0].loc.end.line !== parent.loc.start.line) {
 
                                 /*
                                  * If the first element of the array spans multiple lines, don't increase the expected indentation of the rest.
@@ -765,7 +767,7 @@ module.exports = {
                         }
                     }
                 } else if (!parentVarNode && !isFirstArrayElementOnSameLine(parent) && parent.type !== "MemberExpression" && parent.type !== "ExpressionStatement" && parent.type !== "AssignmentExpression" && parent.type !== "Property") {
-                    nodeIndent = nodeIndent + indentSize;
+                    nodeIndent += indentSize;
                 }
 
                 checkFirstNodeLineIndent(node, nodeIndent);
@@ -797,7 +799,8 @@ module.exports = {
                 }
             }
 
-            checkLastNodeLineIndent(node, nodeIndent + (isNodeInVarOnTop(node, parentVarNode) ? options.VariableDeclarator[parentVarNode.parent.kind] * indentSize : 0));
+            checkLastNodeLineIndent(node, nodeIndent +
+                (isNodeInVarOnTop(node, parentVarNode) ? options.VariableDeclarator[parentVarNode.parent.kind] * indentSize : 0));
         }
 
         /**
@@ -965,7 +968,8 @@ module.exports = {
             const regex = /^return\s*?\(\s*?\);*?/;
 
             const statementWithoutArgument = sourceCode.getText(node).replace(
-                sourceCode.getText(node.argument), "");
+                sourceCode.getText(node.argument), ""
+            );
 
             return regex.test(statementWithoutArgument);
         }
@@ -1039,7 +1043,7 @@ module.exports = {
 
                 const checkNodes = [node.property];
 
-                const dot = context.getTokenBefore(node.property);
+                const dot = sourceCode.getTokenBefore(node.property);
 
                 if (dot.type === "Punctuator" && dot.value === ".") {
                     checkNodes.push(dot);
